@@ -1,4 +1,4 @@
-from init import *
+from Dslr.code.describe.init import *
 import sys
 
 def main():
