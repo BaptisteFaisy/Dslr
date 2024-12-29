@@ -5,22 +5,29 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
-# Données
-def main():
-    dataset1 = [1, 2, 2, 3, 3, 3, 4, 4, 5]
-    dataset2 = [2, 3, 3, 4, 4, 5, 5, 6, 7]
+def histogram(X, legend, title, xlabel, ylabel):
+  h1 = X[:327]
+  h1 = h1[~np.isnan(h1)]
+  plt.hist(h1, color='red', alpha=0.5)
 
-    # Créer un histogramme pour plusieurs ensembles
-    plt.hist([dataset1, dataset2], bins=5, label=['Dataset 1', 'Dataset 2'], color=['blue', 'orange'], alpha=0.7, edgecolor='black')
+  h2 = X[327:856]
+  h2 = h2[~np.isnan(h2)]
+  plt.hist(h2, color='yellow', alpha=0.5)
 
-    # Ajouter des titres et légendes
-    plt.title('Histogramme avec plusieurs ensembles de données')
-    plt.xlabel('Valeurs')
-    plt.ylabel('Fréquence')
-    plt.legend()
+  h3 = X[856:1299]
+  h3 = h3[~np.isnan(h3)]
+  plt.hist(h3, color='blue', alpha=0.5)
 
-    # Afficher
-    plt.show()
+  h4 = X[1299:]
+  h4 = h4[~np.isnan(h4)]
+  plt.hist(h4, color='green', alpha=0.5)
+
+  plt.legend(legend, loc='upper right', frameon=False)
+  plt.title(title)
+  plt.xlabel(xlabel)
+  plt.ylabel(ylabel)
+  plt.show()
+
 
 
 
