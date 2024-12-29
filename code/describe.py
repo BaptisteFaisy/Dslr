@@ -1,5 +1,16 @@
-from Dslr.code.describe.init import *
+from init import *
 import sys
+
+def printdescribe(data, feature, nbr_l):
+	printconter(data, feature, nbr_l)
+	printmoy(data, feature , nbr_l)
+	printstd(data, feature , nbr_l)
+	printmin(data, feature, nbr_l)
+	print25(data, feature, nbr_l)
+	print50(data, feature, nbr_l)
+	print75(data, feature, nbr_l)
+	printmax(data, feature, nbr_l)
+	print("")
 
 def main():
 	feature = []
@@ -40,15 +51,7 @@ def main():
 		print(k, end="")
 		for i in range(45 - len(k)):
 			print(" ", end="")
-		printconter(data, feature, nbr_l)
-		printmoy(data, feature , nbr_l)
-		printstd(data, feature , nbr_l)
-		printmin(data, feature, nbr_l)
-		print25(data, feature, nbr_l)
-		print50(data, feature, nbr_l)
-		print75(data, feature, nbr_l)
-		printmax(data, feature, nbr_l)
-		print("")
+		printdescribe(data, feature, nbr_l)
 		nbr_l += 1
 
 

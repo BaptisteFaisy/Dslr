@@ -1,11 +1,4 @@
-Count = n
-Mean = moyenne
-Std = ecart type
-50 % = medianne
+comment faire pour chercher l'homog
 
 
-2.1 : notes homogenes entre les matieres et les maisons en histogramme
-2.2 : 2 choses les plus correle en faisant un nuage de point (scatter plot)
-2.3 : faire un scatter plot matrix
-
-3 : 
+chercher le % entre le std et la  mean  et trouver la min

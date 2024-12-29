@@ -1,4 +1,4 @@
-from Dslr.code.describe.init import *
+from init import *
 
 
 def printconter(data, feature, nbr_l):
