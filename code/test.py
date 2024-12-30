@@ -5,7 +5,9 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
-def histogram(X, legend, title, xlabel, ylabel):
+def histogram():
+  legend=legend, title="test", xlabel='Marks', ylabel='Number of student'
+
   h1 = X[:327]
   h1 = h1[~np.isnan(h1)]
   plt.hist(h1, color='red', alpha=0.5)
