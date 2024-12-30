@@ -1,6 +1,9 @@
 from init import *
 import sys
 
+
+
+
 def main(): # faut faire par rapport au maison fuck
    feature = []
    option = ""
