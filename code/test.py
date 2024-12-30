@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def histogram():
-  legend=legend, title="test", xlabel='Marks', ylabel='Number of student'
+  legend = ['Grynffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin'], xlabel='Marks', ylabel='Number of student'
 
   h1 = X[:327]
   h1 = h1[~np.isnan(h1)]
@@ -25,7 +25,7 @@ def histogram():
   plt.hist(h4, color='green', alpha=0.5)
 
   plt.legend(legend, loc='upper right', frameon=False)
-  plt.title(title)
+  plt.title("test")
   plt.xlabel(xlabel)
   plt.ylabel(ylabel)
   plt.show()
