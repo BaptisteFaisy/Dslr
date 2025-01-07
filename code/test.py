@@ -41,7 +41,8 @@ def scatter_plot(X, y, legend, xlabel, ylabel):
 
 def pair_plot_hist(ax, X):
   h1 = X[:327]
-  h1 = h1[~np.isnan(h1)]
+  h1 = h1[~np.isnan(h1)]  
+  print(h1)
   ax.hist(h1, alpha=0.5)
 
   h2 = X[327:856]
@@ -57,6 +58,7 @@ def pair_plot_hist(ax, X):
   ax.hist(h4, alpha=0.5)
 
 def pair_plot_scatter(ax, X, y):
+  print("y = " , y, "x = ", X )
   ax.scatter(X[:327], y[:327], s=1, color='red', alpha=0.5)
   ax.scatter(X[327:856], y[327:856], s=1, color='yellow', alpha=0.5)
   ax.scatter(X[856:1299], y[856:1299], s=1, color='blue', alpha=0.5)
@@ -76,18 +78,17 @@ def pair_plot(dataset, features, legend):
     for col in range(0, size):
       X = dataset[:, col]
       y = dataset[:, row]
-
       if col == row:
         pair_plot_hist(ax[row, col], X)
       else:
         pair_plot_scatter(ax[row, col], X, y)
 
-      if ax[row, col].is_last_row():
+      if col == size - 1:
         ax[row, col].set_xlabel(features[col].replace(' ', '\n'))
       else:
         ax[row, col].tick_params(labelbottom=False)
 
-      if ax[row, col].is_first_col():
+      if col == 0:
         ax[row, col].set_ylabel(features[row].replace(' ', '\n'))
       else:
         ax[row, col].tick_params(labelleft=False)

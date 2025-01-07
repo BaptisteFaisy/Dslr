@@ -3,10 +3,10 @@ import csv
 import numpy as np
 import sys
 
-# house == 1 == Gryffindor
-# house == 2 == Ravenclaw
-# house == 3 == Slytherin
-# house == 4 == Hufflepuff
+# house == 1 == Gryffindor r
+# house == 2 == Ravenclaw b
+# house == 3 == Slytherin g
+# house == 4 == Hufflepuff y
 
 # def findbestsubject():
     # data = openfile()
