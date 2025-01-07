@@ -1,3 +1,4 @@
+import init
 import math
 
 def arrondir(nbr):
