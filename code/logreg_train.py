@@ -1,69 +1,71 @@
-import init
+import numpy as np
+import pandas as pd
+import sys
+import pickle
 
-import csv
-import numpy as np 
-from sklearn.preprocessing import LabelEncoder
+class LogisticRegressionOVR_train(object):
+    def __init__(self, w=[], eta=5e-5, n_iter=30000):
+        self.eta = eta
+        self.n_iter = n_iter
+        self.w = w
+        
+    def _scaling(self,X):
+        for i in range(len(X)):
+            X[i] = ( X[i] - X.mean())  / X.std()
+        return X
 
-def sigmoid(z):
-    return 1 / (1 + np.exp(-z))
+        
+    def _processing(self,hptrain):
+        hptrain = hptrain.dropna()
+        hp_features = np.array((hptrain.iloc[:,5:]))
+        hp_labels = np.array(hptrain.loc[:,"Hogwarts House"])
+        
+        np.apply_along_axis(self._scaling, 0, hp_features)
+        return hp_features, hp_labels
 
-# X.dot(theta) est le produit matriciel entre X et theta, représentant les prédictions linéaires.
-def compute_gradient(theta, X, y):
-    m = len(y)
-    h = sigmoid(X.dot(theta)) #sigmoid() applique la fonction sigmoïde pour transformer les valeurs linéaires en probabilités 
-    gradient = (1/m) * X.T.dot(h - y)
-    return gradient
-
-def gradient_descent(X, y, theta, learning_rate, num_iterations):
-    m = len(y)
-    for i in range(num_iterations): # ca boucle sur 1k mais pas de probleme normalement
-        gradient = compute_gradient(theta, X, y)
-        theta -= learning_rate * gradient
-    return theta
-
-def one_vs_all(X, y, num_labels, learning_rate=0.1, num_iterations=1000):
-    m, n = X.shape # m = ligne et n = colonne
-    all_theta = np.zeros((num_labels, n))  # fait un tab de 0 idk why
+        
+        
+    def _sigmoid(self, x):
+        return 1 / (1 + np.exp(-x))
     
-    X = np.hstack([np.ones((m, 1)), X]) # np.one cree un tab de 1 et np.hstack les concatene ?
+
+    def fit(self, hptrain):
+        X, y = self._processing(hptrain)
+        X = np.insert(X, 0, 1, axis=1)
+        m = X.shape[0]
+
+        for i in np.unique(y):
+            y_copy = np.where(y == i, 1, 0)
+            w = np.ones(X.shape[1])
+
+            for _ in range(self.n_iter):
+                output = X.dot(w)
+                errors = y_copy - self._sigmoid(output)
+                gradient = np.dot(X.T, errors)
+                w += self.eta * gradient
+
+            self.w.append((w, i))
+        return self.w
     
-    for c in range(num_labels): #num labels = nombre de maison donc ca boucle sur 4 enfin jsp
-        y_c = np.array([1 if label == c else 0 for label in y]) # y = tab avec les num pour les houses 
-        theta = np.zeros(n + 1)
-        all_theta[c] = gradient_descent(X, y_c, theta, learning_rate, num_iterations)
-    return all_theta
+    
+    
+    def _predict_one(self, x):
+        return max((x.dot(w), c) for w, c in self.w)[1]
+    
+    def predict(self, X):
+        return [self._predict_one(i) for i in np.insert(X, 0, 1, axis=1)]
+    
+    
+    
+    def score(self,hptrain):
+        X, y = self._processing(hptrain)
+        return sum(self.predict(X) == y) / len(y)   
 
-def predict_all(X, all_theta):
-    m = X.shape[0]
-    X = np.hstack([np.ones((m, 1)), X])
-    prob = sigmoid(X.dot(all_theta.T))
-    return np.argmax(prob, axis=1)
-
+    
+    
 if __name__ == "__main__":
-    file_path = '../docs/dataset_train.csv'
-    data = []
-    with open(file_path, 'r') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            data.append(row)
-
-    features = [
-        'Arithmancy', 'Astronomy', 'Herbology', 'Defense Against the Dark Arts',
-        'Divination', 'Muggle Studies', 'Ancient Runes', 'History of Magic',
-        'Transfiguration', 'Potions', 'Care of Magical Creatures', 'Charms', 'Flying'
-    ]
-    X = np.array([[float(row[feature]) if row[feature] else np.nan for feature in features] for row in data])
-    y = np.array([row['Hogwarts House'] for row in data])
-
-    encoder = LabelEncoder()
-    y = encoder.fit_transform(y) # y est un tab des numero des maisons genre la colonne.
-    col_means = np.nanmean(X, axis=0)
-    inds = np.where(np.isnan(X))
-    X[inds] = np.take(col_means, inds[1])
-
-    num_labels = len(np.unique(y)) # num label est le nombre de maison
-    all_theta = one_vs_all(X, y, num_labels)
-
-    predictions = predict_all(X, all_theta)
-
-    print("Prédictions:", predictions)
+    hptrain = pd.read_csv(sys.argv[1], index_col = "Index")
+    weights = LogisticRegressionOVR_train().fit(hptrain)
+    with open("weights.pkl", "wb") as f:
+      pickle.dump(weights, f)
+    print("Poids sauvegardés dans weights.ext, accuracy :", LogisticRegressionOVR_train().score(hptrain))
