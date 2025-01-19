@@ -3,8 +3,6 @@ import pandas as pd
 import sys
 from collections import OrderedDict
 
-#TO DO
-# trop de ligne supprime a cause du manque parfois de data
 class LogisticRegressionOVR_predict(object):
     def __init__(self, eta=5e-5, n_iter=30000):
         self.eta = eta
@@ -17,7 +15,6 @@ class LogisticRegressionOVR_predict(object):
 
     def _processing(self,hptest):
         hptest = hptest.iloc[:,5:]
-        # hptest = hptest.dropna()
         hptest = hptest.fillna(hptest.mean()) 
         hp_features = np.array(hptest)
         
